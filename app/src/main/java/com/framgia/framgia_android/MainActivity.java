@@ -1,9 +1,13 @@
 package com.framgia.framgia_android;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.icu.text.DecimalFormat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         tvUp = findViewById(R.id.tv_result);
         tvDown =  findViewById(R.id.tv_bfresult);
-        tvUp.setText("0");
+        loadResult();
     }
 
     @Override
@@ -116,5 +120,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         s = "0";
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.mymenu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.mnSave){
+            SharedPreferences sharedPreferences= this.getSharedPreferences("Result", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("TextviewUp", tvUp.getText().toString());
+            editor.putString("TextviewDown", tvDown.getText().toString());
+            editor.apply();
+        }else if(id == R.id.mnClear){
+            isNumber = true;
+            num1 = 0;
+            num2 = 0;
+            s = "0";
+            tvUp.setText("0");
+            tvDown.setText("");
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void loadResult(){
+        SharedPreferences sharedPreferences= this.getSharedPreferences("Result", Context.MODE_PRIVATE);
+        if(sharedPreferences!= null) {
+            String rUp = sharedPreferences.getString("TextviewUp", "0");
+            String rDown= sharedPreferences.getString("TextviewDown","");
+            tvUp.setText(rUp);
+            tvDown.setText(rDown);
+            Log.d("TAG", "loadResult: AAAA" );
+        }
 
     }
+}
