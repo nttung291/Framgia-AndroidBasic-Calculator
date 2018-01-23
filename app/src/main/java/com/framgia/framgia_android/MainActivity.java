@@ -42,44 +42,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     computeCalculation();
                     break;
                 case R.id.bt_math:
-                    isNumber = false;
-                    if (button.getText().equals("+")){
-                        computeCalculation();
-                        s = "+";
-                    }
-                    else if (button.getText().equals("-")){
-                        computeCalculation();
-                        s = "-";
-                    }
-                    else if (button.getText().equals("x")){
-                        computeCalculation();
-                        s = "x";
-                    }
-                    else if (button.getText().equals(":")) {
-                        computeCalculation();
-                        s = ":";
-                    }
-                    else if (button.getText().equals("√")) {
-                        computeCalculation();
-                        s = "√";
-                    }
-                    tvUp.setText(decimalFormat.format(num1));
-                    tvDown.setText("");
+                    math(button);
                     break;
                 case R.id.bt_clean:
-                    isNumber = true;
-                    num1 = 0;
-                    num2 = 0;
-                    s = "0";
-                    tvUp.setText("0");
-                    tvDown.setText("");
+                    clean();
                     break;
                 case R.id.bt_c:
-                    String newString = tvDown.getText().toString();
-                    if (!newString.equals("")){
-                        newString = newString.substring(0,tvDown.getText().toString().length()-1);
-                    }
-                    tvDown.setText(newString);
                     break;
                 case R.id.bt_dot:
                     tvDown.setText(tvDown.getText()+".");
@@ -87,6 +55,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.mymenu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.mnSave) {
+            SharedPreferences sharedPreferences = this.getSharedPreferences("Result", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("TextviewUp", tvUp.getText().toString());
+            editor.putString("TextviewDown", tvDown.getText().toString());
+            editor.apply();
+        } else if (id == R.id.mnClear) {
+            isNumber = true;
+            num1 = 0;
+            num2 = 0;
+            s = "0";
+            tvUp.setText("0");
+            tvDown.setText("");
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void computeCalculation(){
         if (!tvDown.getText().equals("")){
             num1 = Double.parseDouble(tvUp.getText().toString());
@@ -120,30 +114,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         s = "0";
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.mymenu, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.mnSave){
-            SharedPreferences sharedPreferences= this.getSharedPreferences("Result", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("TextviewUp", tvUp.getText().toString());
-            editor.putString("TextviewDown", tvDown.getText().toString());
-            editor.apply();
-        }else if(id == R.id.mnClear){
-            isNumber = true;
-            num1 = 0;
-            num2 = 0;
-            s = "0";
-            tvUp.setText("0");
-            tvDown.setText("");
+    public void math(Button button){
+        isNumber = false;
+        if (button.getText().equals("+")){
+            computeCalculation();
+            s = "+";
         }
-        return super.onOptionsItemSelected(item);
+        else if (button.getText().equals("-")){
+            computeCalculation();
+            s = "-";
+        }
+        else if (button.getText().equals("x")){
+            computeCalculation();
+            s = "x";
+        }
+        else if (button.getText().equals(":")) {
+            computeCalculation();
+            s = ":";
+        }
+        else if (button.getText().equals("√")) {
+            computeCalculation();
+            s = "√";
+        }
+        tvUp.setText(decimalFormat.format(num1));
+        tvDown.setText("");
     }
 
     public void loadResult(){
@@ -156,5 +151,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.d("TAG", "loadResult: AAAA" );
         }
 
+    }
+    public void clean(){
+        isNumber = true;
+        num1 = 0;
+        num2 = 0;
+        s = "0";
+        tvUp.setText("0");
+        tvDown.setText("");
     }
 }
