@@ -1,12 +1,9 @@
 package com.framgia.framgia_android;
-import android.icu.text.DecimalFormat;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     MainFragment mainFragment;
@@ -20,5 +17,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         mainFragment.onClick(view);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.mymenu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        mainFragment.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 }

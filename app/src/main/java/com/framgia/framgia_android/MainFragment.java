@@ -1,9 +1,12 @@
 package com.framgia.framgia_android;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -60,6 +63,28 @@ public class MainFragment extends Fragment implements View.OnClickListener{
             }
         }
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.mnSave) {
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("Result", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("TextviewUp", tvUp.getText().toString());
+            editor.putString("TextviewDown", tvDown.getText().toString());
+            editor.apply();
+        } else if (id == R.id.mnClear) {
+            isNumber = true;
+            num1 = 0;
+            num2 = 0;
+            s = "0";
+            tvUp.setText("0");
+            tvDown.setText("");
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void computeCalculation(){
         if (!tvDown.getText().equals("")){
             num1 = Double.parseDouble(tvUp.getText().toString());
@@ -92,6 +117,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         }
         s = "0";
     }
+
     public void math(Button button){
         isNumber = false;
         if (button.getText().equals("+")){
@@ -117,6 +143,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         tvUp.setText(decimalFormat.format(num1));
         tvDown.setText("");
     }
+
     public void clean(){
         isNumber = true;
         num1 = 0;
